@@ -36,6 +36,10 @@ test.describe("SignIn test suite", () => {
   test.afterEach('Tear down', async () => {
     log('cleanup browser & context')
     await context.close();
+  });
+
+  test.afterAll('Tear down', async () => {
+    log('cleanup browser & context')
     await browser.close();
   });
 
@@ -72,7 +76,7 @@ test.describe("SignIn test suite", () => {
     await signIn(page, userEmail, password);
   });
 
-  test("SignIn - can sign up", async ({ }) => {
+  test("SignIn - can access to sign up page", async ({ }) => {
     expect(page.url()).toContain(accountsUrl);
 
     await page.getByRole("button", { name: "Create account" }).click();
@@ -83,9 +87,7 @@ test.describe("SignIn test suite", () => {
   });
 
   test("SignIn - can show password", async ({ }) => {
-    const signInIcon = page.getByLabel("Google Account: ilan test (");
-
-    if (await signInIcon.isVisible()) await signOut(page);
+    await checkIfSignInAndSignOut(page)
 
     await page.getByLabel("Email or phone").fill(userEmail);
     await page.getByRole("button", { name: "Next" }).click();
@@ -116,8 +118,7 @@ test.describe("SignIn test suite", () => {
 });
 
   test("SignIn - not found username", async ({ }) => {
-    const signInIcon = page.getByLabel("Google Account: ilan test (");
-    if (await signInIcon.isVisible()) await signOut(page);
+    await checkIfSignInAndSignOut(page)
 
     expect(page.url()).toContain(accountsUrl);
 
@@ -131,8 +132,7 @@ test.describe("SignIn test suite", () => {
   });
 
   test("SignIn - not valid username", async ({ }) => {
-    const signInIcon = page.getByLabel("Google Account: ilan test (");
-    if (await signInIcon.isVisible()) await signOut(page);
+    await checkIfSignInAndSignOut(page)
 
     expect(page.url()).toContain(accountsUrl);
 
@@ -146,8 +146,7 @@ test.describe("SignIn test suite", () => {
   });
 
   test("SignIn - wrong password", async ({ }) => {
-    const signInIcon = page.getByLabel("Google Account: ilan test (");
-    if (await signInIcon.isVisible()) await signOut(page);
+    await checkIfSignInAndSignOut(page)
 
     expect(page.url()).toContain(accountsUrl);
 
